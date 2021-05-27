@@ -96,6 +96,11 @@ public class maze extends JPanel {
         northbar.setText(" ");
      
     }
+    
+    private void AStar() {
+    	
+    }
+    
     private void reset() {
     	
     	tileLeft = TILES;
@@ -149,8 +154,8 @@ public class maze extends JPanel {
             if(x > 20 && x < 20+75) {
             	
             	if( y > 120-10 && y < 120+10) {
-            		//start A*
-            		System.out.println("start\n");
+            		
+            		AStar();
             		doRepaint = true;
             	}
             	if( y > 160-10 && y < 160+10) {
