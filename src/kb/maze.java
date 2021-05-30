@@ -100,16 +100,6 @@ public class maze extends JPanel {
     }
     
     private void AStar() {
-//        for (int i = 0; i < N_ROWS; i++) {
-//            field[(i * N_ROWS) + i] = PATH;
-//        }
-//
-//        for (int i = 0; i < N_ROWS; i++) {
-//            for (int j = 0; j < N_COLS; j++) {
-//                System.out.print(field[(i * N_COLS) + j] + " ");
-//            }
-//            System.out.println();
-//        }
         Node start = new Node(startX, startY);
         Node end = new Node(finalX, finalY);
 
@@ -118,6 +108,15 @@ public class maze extends JPanel {
         System.out.println("size " + res.size());
 
         for (Node n : res) {
+
+            if (n.getX() == startX && n.getY() == startY) {
+                continue;
+            }
+            if (n.getX() == finalX && n.getY() == finalY) {
+                continue;
+            }
+
+            field[(n.getX() * N_COLS) + n.getY()] = PATH;
             System.out.println(n.getX() + ", " + n.getY());
         }
     }
@@ -127,7 +126,7 @@ public class maze extends JPanel {
             return false;
         }
         int tile = field[(x * N_COLS) + y];
-        if (tile == EMPTY) {
+        if (tile == EMPTY || tile == END) {
             return true;
         }
         return false;
@@ -179,6 +178,7 @@ public class maze extends JPanel {
 
             x = node.getX();
             y = node.getY();
+
             closedList[x][y] = true;
 
             for (int newX = -1; newX <= 1; newX++) {
