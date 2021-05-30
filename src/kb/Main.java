@@ -16,28 +16,23 @@ import javax.swing.JLabel;
 
 public class Main extends JFrame {
 
-    private JLabel statusbar;
-    private JLabel northbar;
-
     private JButton button;
     
     public Main() {
-
         initUI();
     }
 
     private void initUI() {
-
-        statusbar = new JLabel("");
-        add(statusbar, BorderLayout.SOUTH);
-        northbar = new JLabel("");
-        northbar.setHorizontalAlignment(JLabel.CENTER);
-        add(northbar, BorderLayout.NORTH);
+        JLabel statusBar = new JLabel("");
+        add(statusBar, BorderLayout.SOUTH);
+        JLabel northBar = new JLabel("");
+        northBar.setHorizontalAlignment(JLabel.CENTER);
+        add(northBar, BorderLayout.NORTH);
         
         button = new JButton("Click here!");
         add(button);
         
-        add(new maze(statusbar,northbar));
+        add(new maze(statusBar, northBar));
 
         setResizable(false);
         pack();
@@ -48,10 +43,7 @@ public class Main extends JFrame {
     }
 
     public static void main(String[] args) {
-    	System.out.println("Working Directory = " + System.getProperty("user.dir"));
-
         EventQueue.invokeLater(() -> {
-
             var ex = new Main();
             ex.setVisible(true);
         });
