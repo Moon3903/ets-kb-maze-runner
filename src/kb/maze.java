@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -114,14 +115,18 @@ public class maze extends JPanel {
 
         ArrayList<Node> res = AStarHelper(start, end);
 
+        System.out.println("size " + res.size());
+
         for (Node n : res) {
             System.out.println(n.getX() + ", " + n.getY());
         }
     }
 
     private boolean isValid(int x, int y) {
+        if (x < 0 || y < 0 || x >= N_ROWS || y >= N_COLS) {
+            return false;
+        }
         int tile = field[(x * N_COLS) + y];
-
         if (tile == EMPTY) {
             return true;
         }
@@ -164,27 +169,13 @@ public class maze extends JPanel {
         allMap[x][y].setParentX(x);
         allMap[x][y].setParentY(y);
 
-        ArrayList<Node> openList = new ArrayList<Node>();
+        PriorityQueue<Node> openList = new PriorityQueue<Node>(new NodeComparator());
         openList.add(allMap[x][y]);
+
         boolean destinationFound = false;
 
         while (!openList.isEmpty() && openList.size() < N_COLS * N_ROWS) {
-            Node node = new Node(openList.get(0).getX(), openList.get(0).getY());
-
-//            do {
-//                float temp = Float.MAX_VALUE;
-//
-//                Node tempNode = new Node(0, 0);
-//                for (Node n : openList) {
-//                    if (n.getFCost() < temp) {
-////                        System.out.println("here in if");
-//                        temp = n.getFCost();
-//                        tempNode = new Node(n.getX(), n.getY());
-//                    }
-//                }
-//                node = new Node(tempNode.getX(), tempNode.getY());
-//                openList.remove(tempNode);
-//            } while (isValid(node.getX(), node.getY()) == false);
+            Node node = openList.poll();
 
             x = node.getX();
             y = node.getY();
@@ -201,7 +192,7 @@ public class maze extends JPanel {
                             destinationFound = true;
                             return makePath(allMap);
                         }
-                        else if (!closedList[x + newX][y + newX]) {
+                        else if (!closedList[x + newX][y + newY]) {
                             gNew = node.getGCost() + (float)1.0;
                             hNew = (float) calculateH(x + newX, y + newY);
                             fNew = gNew + hNew;
@@ -225,6 +216,8 @@ public class maze extends JPanel {
     }
 
     private ArrayList<Node> makePath(Node[][] map) {
+        System.out.println("in make path");
+
         int x = finalX;
         int y = finalY;
         Stack<Node> path = new Stack<Node>();
