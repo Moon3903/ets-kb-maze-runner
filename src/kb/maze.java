@@ -105,7 +105,16 @@ public class maze extends JPanel {
 
         ArrayList<Node> res = AStarHelper(start, end);
 
-        System.out.println("size " + res.size());
+//        System.out.println("size " + res.size());
+
+        var paths = res.size();
+
+        if (paths == 0) {
+            System.out.println("you blocked everything :(");
+            return;
+        }
+
+        score = (paths - 2);
 
         for (Node n : res) {
 
@@ -117,7 +126,7 @@ public class maze extends JPanel {
             }
 
             field[(n.getX() * N_COLS) + n.getY()] = PATH;
-            System.out.println(n.getX() + ", " + n.getY());
+//            System.out.println(n.getX() + ", " + n.getY());
         }
     }
 
@@ -126,10 +135,7 @@ public class maze extends JPanel {
             return false;
         }
         int tile = field[(x * N_COLS) + y];
-        if (tile == EMPTY || tile == END) {
-            return true;
-        }
-        return false;
+        return tile == EMPTY || tile == END;
     }
     private boolean isDestination(int x, int y) {
         if (x == finalX && y == finalY) {
@@ -178,10 +184,6 @@ public class maze extends JPanel {
             x = node.getX();
             y = node.getY();
 
-            System.out.println("processed : " + Integer.toString(x) + " " +
-            					Integer.toString(y)+ " " +
-            					Float.toString(node.getFCost()));
-            
             closedList[x][y] = true;
 
             for (int newX = -1; newX <= 1; newX++) {
@@ -210,9 +212,6 @@ public class maze extends JPanel {
                             if (allMap[x + newX][y + newY].getFCost() == Integer.MAX_VALUE ||
                                     allMap[x + newX][y + newY].getFCost() > fNew)
                             {
-                            	System.out.println("added : " + Integer.toString(x + newX) + " "
-                            						+ Integer.toString(y + newY) + " " + 
-                            							Integer.toString(fNew));
                                 allMap[x + newX][y + newY].setFCost(fNew);
                                 allMap[x + newX][y + newY].setGCost(gNew);
                                 allMap[x + newX][y + newY].setHCost(hNew);
@@ -229,12 +228,10 @@ public class maze extends JPanel {
     }
 
     private ArrayList<Node> makePath(Node[][] map) {
-        System.out.println("in make path");
-
         int x = finalX;
         int y = finalY;
         Stack<Node> path = new Stack<Node>();
-        ArrayList<Node> useablePath = new ArrayList<Node>();
+        ArrayList<Node> usablePath = new ArrayList<Node>();
 
         while (!(map[x][y].getParentX() == x && map[x][y].getParentY() == y)
                 && map[x][y].getX() != -1 && map[x][y].getY() != -1) {
@@ -249,13 +246,14 @@ public class maze extends JPanel {
         while (!path.isEmpty()) {
             Node top = path.peek();
             path.pop();
-            useablePath.add(top);
+            usablePath.add(top);
         }
-        return useablePath;
+        return usablePath;
     }
 
     private void reset() {
     	tileLeft = TILES;
+    	score = 0;
     	allCells = N_ROWS * N_COLS;
     	
     	for (int i = 0; i < allCells; i++) {
