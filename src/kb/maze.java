@@ -137,9 +137,8 @@ public class maze extends JPanel {
         }
         return false;
     }
-    private double calculateH(int x, int y) {
-        double H = (Math.sqrt((x - finalX)*(x - finalX)
-                + (y - finalY)*(y - finalY)));
+    private int calculateH(int x, int y) {
+        int H = Math.abs(x-finalX) + Math.abs(y-finalY);
 
         return H;
     }
@@ -162,28 +161,32 @@ public class maze extends JPanel {
         int x = start.getX();
         int y = start.getY();
 
-        allMap[x][y].setFCost((float)0.0);
-        allMap[x][y].setGCost((float)0.0);
-        allMap[x][y].setHCost((float)0.0);
+        allMap[x][y].setFCost(0);
+        allMap[x][y].setGCost(0);
+        allMap[x][y].setHCost(0);
         allMap[x][y].setParentX(x);
         allMap[x][y].setParentY(y);
 
-        PriorityQueue<Node> openList = new PriorityQueue<Node>(new NodeComparator());
+        PriorityQueue<Node> openList = new PriorityQueue<Node>(300,new NodeComparator());
         openList.add(allMap[x][y]);
 
         boolean destinationFound = false;
 
         while (!openList.isEmpty() && openList.size() < N_COLS * N_ROWS) {
             Node node = openList.poll();
-
+            
             x = node.getX();
             y = node.getY();
 
+            System.out.println("processed : " + Integer.toString(x) + " " +
+            					Integer.toString(y)+ " " +
+            					Float.toString(node.getFCost()));
+            
             closedList[x][y] = true;
 
             for (int newX = -1; newX <= 1; newX++) {
                 for (int newY = -1; newY <= 1; newY++) {
-                    float gNew, hNew, fNew;
+                    int gNew, hNew, fNew;
 
                     if (isValid(x + newX, y + newY)) {
                         if (isDestination(x + newX, y + newY)) {
@@ -193,13 +196,16 @@ public class maze extends JPanel {
                             return makePath(allMap);
                         }
                         else if (!closedList[x + newX][y + newY]) {
-                            gNew = node.getGCost() + (float)1.0;
-                            hNew = (float) calculateH(x + newX, y + newY);
+                            gNew = node.getGCost() + 1;
+                            hNew = calculateH(x + newX, y + newY);
                             fNew = gNew + hNew;
 
-                            if (allMap[x + newX][y + newY].getFCost() == Float.MAX_VALUE ||
+                            if (allMap[x + newX][y + newY].getFCost() == Integer.MAX_VALUE ||
                                     allMap[x + newX][y + newY].getFCost() > fNew)
                             {
+                            	System.out.println("added : " + Integer.toString(x + newX) + " "
+                            						+ Integer.toString(y + newY) + " " + 
+                            							Integer.toString(fNew));
                                 allMap[x + newX][y + newY].setFCost(fNew);
                                 allMap[x + newX][y + newY].setGCost(gNew);
                                 allMap[x + newX][y + newY].setHCost(hNew);
