@@ -186,6 +186,13 @@ public class maze extends JPanel {
 
             for (int newX = -1; newX <= 1; newX++) {
                 for (int newY = -1; newY <= 1; newY++) {
+                	if (newX == newY) {
+                		continue;
+                	}
+                	if((newX == 1 && newY == -1) ||
+                			(newX == -1 && newY == 1)) {
+                		continue;
+                	}
                     int gNew, hNew, fNew;
 
                     if (isValid(x + newX, y + newY)) {
