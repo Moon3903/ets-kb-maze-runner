@@ -5,17 +5,17 @@ public class Node {
     private int x;
     private int parentX;
     private int parentY;
-    private float gCost;
-    private float hCost;
-    private float fCost;
+    private int gCost;
+    private int hCost;
+    private int fCost;
 
     public Node(int x, int y) {
         this.x = x;
         this.y = y;
 
-        this.fCost = Float.MAX_VALUE;
-        this.gCost = Float.MAX_VALUE;
-        this.hCost = Float.MAX_VALUE;
+        this.fCost = Integer.MAX_VALUE;
+        this.gCost = Integer.MAX_VALUE;
+        this.hCost = Integer.MAX_VALUE;
 
         this.parentX = -1;
         this.parentY = -1;
@@ -48,24 +48,24 @@ public class Node {
         this.parentY = parentY;
     }
 
-    public float getGCost() {
+    public int getGCost() {
         return gCost;
     }
-    public void setGCost(float gCost) {
+    public void setGCost(int gCost) {
         this.gCost = gCost;
     }
 
     public float getHCost() {
         return hCost;
     }
-    public void setHCost(float hCost) {
+    public void setHCost(int hCost) {
         this.hCost = hCost;
     }
 
-    public float getFCost() {
+    public int getFCost() {
         return fCost;
     }
-    public void setFCost(float fCost) {
+    public void setFCost(int fCost) {
         this.fCost = fCost;
     }
 }
