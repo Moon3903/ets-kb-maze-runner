@@ -105,8 +105,6 @@ public class maze extends JPanel {
 
         ArrayList<Node> res = AStarHelper(start, end);
 
-//        System.out.println("size " + res.size());
-
         var paths = res.size();
 
         if (paths == 0) {
@@ -115,18 +113,14 @@ public class maze extends JPanel {
         }
 
         score = (paths - 2);
-
         for (Node n : res) {
-
             if (n.getX() == startX && n.getY() == startY) {
                 continue;
             }
             if (n.getX() == finalX && n.getY() == finalY) {
                 continue;
             }
-
             field[(n.getX() * N_COLS) + n.getY()] = PATH;
-//            System.out.println(n.getX() + ", " + n.getY());
         }
     }
 
